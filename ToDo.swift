@@ -7,6 +7,12 @@ struct ToDO {
         return "\"\(title)\" | content: \(content) | with priority \"\(priority)\""
     }
 }
+enum Commands:String {
+    case create = "create"
+    case all = "all"
+    case edit = "edit"
+    case delete = "delete"
+}
 
 func print_all_objects() {
     print("List of all objects:\n")
@@ -46,10 +52,9 @@ func edit_menu(obj:inout ToDO){
 
 var all_todos = [ToDO]()
 
-let main_menu = "To Do App\nCommands:\ncreate <title> <content> <priority> --> create new To do\nall --> see all Todos\n" +
-            "edit <id> --> Edit menu\ndelete <id>\n"
-
-
+let main_menu = "To Do App\nCommands:\n\(Commands.create) <title> <content> <priority> --> create new To do\n" + 
+            "\(Commands.all) --> see all Todos\n" +
+            "\(Commands.edit) <id> --> Edit menu\n\(Commands.delete) <id>\n"
 
 while true {
     test()
@@ -57,16 +62,16 @@ while true {
     let command = "delete 0".components(separatedBy: " ") //readLine().components(separatedBy: " ")
 
     switch command[0] {
-        case "create":
+        case Commands.create.rawValue:
             var temp:ToDO = ToDO(title:command[1],content:command[2],priority:command[3])
             all_todos.append(temp)
             print_all_objects()
-        case "see":
+        case Commands.all.rawValue:
             print_all_objects()
-        case "edit":
+        case Commands.edit.rawValue:
             edit_menu(obj:&all_todos[Int(command[1])!])
             print_all_objects()
-        case "delete":
+        case Commands.delete.rawValue:
             all_todos.remove(at:Int(command[1])!)
             //should we remove obj too?
             print_all_objects()
