@@ -81,7 +81,7 @@ func edit_menu(obj:inout ToDO){
 
 func list_menu(){
     let list_menu_str = "List Menu:\nall --> see all lists\nmake <name> --> make a list with name\n" +
-            "add <todo_id> <list_id> --> add todo item to a group\n"
+            "add <todo_id> <list_id> --> add todo item to a group\ncheck <todo_id> --> see todo list name\n"
     while true {
         print(list_menu_str)
         let command = readLine().components(separatedBy: " ")
@@ -96,6 +96,15 @@ func list_menu(){
                 var group_id = Int(command[2])!
                 var todo_id = Int(command[1])!
                 lists[group_id].todos.append(all_todos[todo_id])
+            case "check":
+                var todo_id = Int(command[1])!
+                var todo = all_todos[todo_id] 
+                for list in lists{
+                    if list.todos.contais(todo){
+                        print("\(todo.title) is in \(list.name) list")
+                        break
+                    }
+                }
             case "exit":
                 break
             default:
