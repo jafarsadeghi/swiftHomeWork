@@ -1,7 +1,10 @@
+import Foundation
+
 struct ToDO {
     var title = ""
     var content = ""
     var priority = ""
+    var time_created = NSDate()
     
     var description: String {
         return "\"\(title)\" | content: \(content) | with priority \"\(priority)\""
@@ -22,6 +25,8 @@ enum Commands:String {
     case edit = "edit"
     case delete = "delete"
     case group = "group"
+    case order = "order"
+    case exit = "exit"
 }
 
 func is_unique(array:[ToDo],new_item:ToDO){
@@ -99,17 +104,52 @@ func list_menu(){
     }
 }
 
+func order_menu(){
+    print("Order By:\n1.Time created\t2.Title\t3.Priority\nEnter choice : ")
+    var type = Int(readLine())!
+    print("Ordering Type:\n1.Ascending\t2.Descending\nEnter choice : ")
+    var ascending = Int(readLine())! == 1 ? true ? false
+    switch type {
+        case 1:
+            all_todos = sort(all_todos,{s1, s2 in 
+            if ascending{
+                return s1.time_created > s2.time_created
+            }
+            else {
+                return s1.time_created < s2.time_created
+            }
+            })
+        case 2:
+            all_todos = sort(all_todos,{s1, s2 in 
+            if ascending{
+                return s1.title > s2.title
+            }
+            else {
+                return s1.title < s2.title
+            }
+            })
+        case 3:
+            all_todos = sort(all_todos,{s1, s2 in 
+            if ascending{
+                return s1.priority > s2.priority
+            }
+            else {
+                return s1.priority < s2.priority
+            }
+            })
+    }
 
-
-
+}
 
 var all_todos = [ToDO]()
 var lists = [List]()
 
-let main_menu = "To Do App\nUse exit in every menu to return to next menu\nCommands:\n\(Commands.create) <title> <content> <priority> --> create new To do\n" + 
+let main_menu = "To Do App\nUse \(Commands.exit) in every menu to return to next menu\nCommands:\n" + 
+            "\(Commands.create) <title> <content> <priority> --> create new To do\n" +
             "\(Commands.all) --> see all Todos\n\(Commands.delete) <id>\n" +
             "\(Commands.edit) <id> --> Edit menu\n" +
-            "\(Commands.group) --> Group menu\n"
+            "\(Commands.group) --> Group menu\n" +
+            "\(Commands.order) --> change ordering\n"
 
 while true {
     print(main_menu)
@@ -117,7 +157,7 @@ while true {
 
     switch command[0] {
         case Commands.create.rawValue:
-            var temp:ToDO = ToDO(title:command[1],content:command[2],priority:command[3])
+            var temp:ToDO = ToDO(title:command[1],content:command[2],priority:command[3],time_created:NSDate())
             all_todos.append(temp)
             print_objects(all_todos)
         case Commands.all.rawValue:
@@ -131,6 +171,9 @@ while true {
             print_objects(all_todos)
         case Commands.group.rawValue:
             list_menu()
+        case Commands.order.rawValue:
+            order_menu()
+            print_objects(all_todos)
         case "exit":
             break
         default:
