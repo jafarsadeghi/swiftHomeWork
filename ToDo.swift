@@ -53,20 +53,12 @@ func print_objects(array:[T]) {
     }
 }
 
-func test() {
-    var temp:ToDO = ToDO(title:"ali",content:"with content",priority:"5")
-    all_todos.append(temp)
-    temp = ToDO(title:"hasan",content:"with content888",priority:"5")
-    all_todos.append(temp)
-    print_objects(all_todos)
-}
-
 func edit_menu(obj:inout ToDO){
     let edit_menu_str = "Edit Menu:\n\(obj.description)\ntitle <title> --> edit title\ncontent <content> --> edit content\n" +
             "priority <priority> --> edit priority\n"
     while true {
         print(edit_menu_str)
-        let command = "title changed_title".components(separatedBy: " ") //readLine().components(separatedBy: " ")
+        let command = readLine().components(separatedBy: " ")
         switch command[0] {
             case "title":
                 obj.title = command[1]
@@ -74,10 +66,11 @@ func edit_menu(obj:inout ToDO){
                 obj.content = command[1]
             case "priority":
                 obj.priority = command[1]
+            case "exit":
+                break
             default:
                 print("fuck u")
         }
-        break
     }
 }
 
@@ -86,7 +79,7 @@ func list_menu(){
             "add <todo_id> <list_id> --> add todo item to a group\n"
     while true {
         print(list_menu_str)
-        let command = "make group1".components(separatedBy: " ") //readLine().components(separatedBy: " ")
+        let command = readLine().components(separatedBy: " ")
         switch command[0] {
             case "all":
                 print_objects(lists)
@@ -98,10 +91,11 @@ func list_menu(){
                 var group_id = Int(command[2])!
                 var todo_id = Int(command[1])!
                 lists[group_id].todos.append(all_todos[todo_id])
+            case "exit":
+                break
             default:
                 print("fuk u")
         }
-        break
     }
 }
 
@@ -112,15 +106,14 @@ func list_menu(){
 var all_todos = [ToDO]()
 var lists = [List]()
 
-let main_menu = "To Do App\nCommands:\n\(Commands.create) <title> <content> <priority> --> create new To do\n" + 
+let main_menu = "To Do App\nUse exit in every menu to return to next menu\nCommands:\n\(Commands.create) <title> <content> <priority> --> create new To do\n" + 
             "\(Commands.all) --> see all Todos\n\(Commands.delete) <id>\n" +
             "\(Commands.edit) <id> --> Edit menu\n" +
             "\(Commands.group) --> Group menu\n"
 
 while true {
-    test()
     print(main_menu)
-    let command = "delete 0".components(separatedBy: " ") //readLine().components(separatedBy: " ")
+    let command = readLine().components(separatedBy: " ")
 
     switch command[0] {
         case Commands.create.rawValue:
@@ -138,8 +131,9 @@ while true {
             print_objects(all_todos)
         case Commands.group.rawValue:
             list_menu()
+        case "exit":
+            break
         default:
             print("fukc u")
     }
-    break
 }
