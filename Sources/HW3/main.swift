@@ -21,6 +21,17 @@ let LIST_MENU =
             "check <todo_id> --> see todo list name\n" +
             "-----------------------------------"; 
 
+let ORDER_MENU =
+            "-----------------------------------\n" +
+            "Oredr Menu:\n" +
+            "priority asc\n" +
+            "priority des\n" +
+            "created_time asc\n" +
+            "created_time des\n" +
+            "title asc\n" +
+            "title des\n" +
+            "------------------------------------";
+
 enum Commands: String {
     case create = "create"
     case all = "all"
@@ -154,41 +165,42 @@ func list_menu(){
     }
 }
 
-// func order_menu(){
-//     print("Order By:\n1.Time created\t2.Title\t3.Priority\nEnter choice : ")
-//     var type = Int(readLine())!
-//     print("Ordering Type:\n1.Ascending\t2.Descending\nEnter choice : ")
-//     var ascending = Int(readLine())! == 1 ? true : false
-//     switch type {
-//         case 1:
-//             all_todos = sort(all_todos,{s1, s2 in 
-//             if ascending{
-//                 return s1.time_created > s2.time_created
-//             }
-//             else {
-//                 return s1.time_created < s2.time_created
-//             }
-//             })
-//         case 2:
-//             all_todos = sort(all_todos,{s1, s2 in 
-//             if ascending{
-//                 return s1.title > s2.title
-//             }
-//             else {
-//                 return s1.title < s2.title
-//             }
-//             })
-//         case 3:
-//             all_todos = sort(all_todos,{s1, s2 in 
-//             if ascending{
-//                 return s1.priority > s2.priority
-//             }
-//             else {
-//                 return s1.priority < s2.priority
-//             }
-//             })
-//     }
-// }
+ func order_menu(){
+    order_while: while true{
+        print(ORDER_MENU)
+        let command = readLine()!.components(separatedBy: " ")
+        switch command[0] {
+            case "priority":
+                if command[1]=="asc"{
+                    all_todos.sort{$0.priority < $1.priority}
+                    print_objects(todos: all_todos)
+                }else{
+                    all_todos.sort{$0.priority > $1.priority}
+                    print_objects(todos: all_todos)
+                }
+            case "created_time":
+                if command[1]=="asc"{
+                    all_todos.sort{$0.time_created < $1.time_created}
+                    print_objects(todos: all_todos)
+                }else{
+                    all_todos.sort{$0.time_created > $1.time_created}
+                    print_objects(todos: all_todos)
+                }
+            case "title":
+                if command[1]=="asc"{
+                    all_todos.sort{$0.title < $1.title}
+                    print_objects(todos: all_todos)
+                }else{
+                    all_todos.sort{$0.title > $1.title}
+                    print_objects(todos: all_todos)
+                }
+            case "exit":
+                break order_while
+            default:
+                print("your command is not correct, try again!")
+            }
+        }
+    }
 
 
 app: while true {
@@ -210,6 +222,8 @@ app: while true {
         // case Commands.order.rawValue:
         //     order_menu()
         //     print_objects(all_todos)
+        case Commands.order.rawValue:
+            order_menu()
         case "exit":
             break app
         default:
