@@ -45,7 +45,7 @@ enum Commands: String {
 struct ToDo: Equatable {
     var title = ""
     var content = ""
-    var priority = ""
+    var priority = 0
     var time_created = NSDate()
     
     var description: String {
@@ -115,7 +115,7 @@ func edit_menu(obj: inout ToDo){
             case "content":
                 obj.content = command[1]
             case "priority":
-                obj.priority = command[1]
+                obj.priority = Int(command[1])!
             case "exit":
                 break edit_while
             default:
@@ -208,7 +208,7 @@ app: while true {
     let command = readLine()!.components(separatedBy: " ")
     switch command[0] {
         case Commands.create.rawValue:
-            let temp: ToDo = ToDo(title:command[1], content:command[2], priority:command[3])
+            let temp: ToDo = ToDo(title:command[1], content:command[2], priority: Int(command[3])!)
             all_todos.append(temp)
         case Commands.all.rawValue:
             print_objects(todos: all_todos)
