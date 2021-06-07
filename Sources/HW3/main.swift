@@ -1,6 +1,6 @@
 import Foundation
 
-struct ToDo {
+struct ToDo: Equatable {
     var title = ""
     var content = ""
     var priority = ""
@@ -19,9 +19,8 @@ struct List {
     }
 }
 
-var a = ToDo(content: "hi۱۳chi");
-a.title = "salam";
-print(a.description);
+var all_todos = [ToDo]()
+var lists = [List]()
 
 enum Commands: String {
     case create = "create"
@@ -88,39 +87,48 @@ func edit_menu(obj:inout ToDo){
     }
 }
 
-// func list_menu(){
-//     let list_menu_str = "List Menu:\nall --> see all lists\nmake <name> --> make a list with name\n" +
-//             "add <todo_id> <list_id> --> add todo item to a group\ncheck <todo_id> --> see todo list name\n"
-//     while true {
-//         print(list_menu_str)
-//         let command = readLine().components(separatedBy: " ")
-//         switch command[0] {
-//             case "all":
-//                 print_objects(lists)
-//             case "make":
-//                 var temp = List(name:command[1],todos:[List]())
-//                 lists.append(temp)
-//                 print_objects(lists)
-//             case "add":
-//                 var group_id = Int(command[2])!
-//                 var todo_id = Int(command[1])!
-//                 lists[group_id].todos.append(all_todos[todo_id])
-//             case "check":
-//                 var todo_id = Int(command[1])!
-//                 var todo = all_todos[todo_id] 
-//                 for list in lists{
-//                     if list.todos.contais(todo){
-//                         print("\(todo.title) is in \(list.name) list")
-//                         break
-//                     }
-//                 }
-//             case "exit":
-//                 break
-//             default:
-//                 print("fuk u")
-//         }
-//     }
-// }
+func list_menu(){
+    let list_menu_string = "List Menu:\nall --> see all lists\nmake <name> --> make a list with name\n" +
+            "add <todo_id> <list_id> --> add todo item to a group\ncheck <todo_id> --> see todo list name\n"
+    while true {
+        print(list_menu_string)
+        let input_string = readLine(); 
+        if input_string == nil {
+          print("Please enter something!");
+          continue;
+        }
+        let command = input_string!.components(separatedBy: " ")
+        switch command[0] {
+            case "all":
+                for list in lists {
+                  print_objects(todos: list.todos)
+                }
+            case "make":
+                let temp = List(name: command[1])
+                lists.append(temp)
+                for list in lists {
+                  print_objects(todos: list.todos)
+                }
+            case "add":
+                let group_id = Int(command[2])!
+                let todo_id = Int(command[1])!
+                lists[group_id].todos.append(all_todos[todo_id])
+            case "check":
+                let todo_id = Int(command[1])!
+                let todo = all_todos[todo_id] 
+                for list in lists{
+                    if list.todos.contains(todo){
+                        print("\(todo.title) is in \(list.name) list")
+                        break
+                    }
+                }
+            case "exit":
+                break
+            default:
+                print("fuk u")
+        }
+    }
+}
 
 // func order_menu(){
 //     print("Order By:\n1.Time created\t2.Title\t3.Priority\nEnter choice : ")
@@ -156,45 +164,47 @@ func edit_menu(obj:inout ToDo){
 //             }
 //             })
 //     }
-
 // }
 
-// var all_todos = [ToDo]()
-// var lists = [List]()
 
-// let main_menu = "To Do App\nUse \(Commands.exit) in every menu to return to next menu\nCommands:\n" + 
-//             "\(Commands.create) <title> <content> <priority> --> create new To do\n" +
-//             "\(Commands.all) --> see all Todos\n\(Commands.delete) <id>\n" +
-//             "\(Commands.edit) <id> --> Edit menu\n" +
-//             "\(Commands.group) --> Group menu\n" +
-//             "\(Commands.order) --> change ordering\n";
+let MAIN_MENU = "\nTo Do App\nUse \(Commands.exit) in every menu to return to next menu\nCommands:\n" + 
+            "\(Commands.create) <title> <content> <priority> --> create new To do\n" +
+            "\(Commands.all) --> see all Todos\n\(Commands.delete) <id>\n" +
+            "\(Commands.edit) <id> --> Edit menu\n" +
+            "\(Commands.group) --> Group menu\n" +
+            "\(Commands.order) --> change ordering\n";
 
-// while true {
-//     print(main_menu)
-//     let command = readLine().components(separatedBy: " ")
+whole_app: while true {
+    print(MAIN_MENU)
+    let input_string = readLine(); 
+        if input_string == nil {
+          print("Please enter something!");
+          continue;
+        }
+    let command = input_string!.components(separatedBy: " ")
 
-//     switch command[0] {
-//         case Commands.create.rawValue:
-//             var temp:ToDo = ToDo(title:command[1],content:command[2],priority:command[3],time_created:NSDate())
-//             all_todos.append(temp)
-//             print_objects(all_todos)
-//         case Commands.all.rawValue:
-//             print_objects(all_todos)
-//         case Commands.edit.rawValue:
-//             edit_menu(obj:&all_todos[Int(command[1])!])
-//             print_objects(all_todos)
-//         case Commands.delete.rawValue:
-//             all_todos.remove(at:Int(command[1])!)
-//             //should we remove obj too?
-//             print_objects(all_todos)
-//         case Commands.group.rawValue:
-//             list_menu()
-//         case Commands.order.rawValue:
-//             order_menu()
-//             print_objects(all_todos)
-//         case "exit":
-//             break
-//         default:
-//             print("fukc u")
-//     }
-// }
+    switch command[0] {
+        case Commands.create.rawValue:
+            let temp:ToDo = ToDo(title:command[1],content:command[2],priority:command[3],time_created:NSDate())
+            all_todos.append(temp)
+            print_objects(todos: all_todos)
+        case Commands.all.rawValue:
+            print_objects(todos: all_todos)
+        case Commands.edit.rawValue:
+            edit_menu(obj:&all_todos[Int(command[1])!])
+            print_objects(todos: all_todos)
+        case Commands.delete.rawValue:
+            all_todos.remove(at:Int(command[1])!)
+            //should we remove obj too?
+            print_objects(todos: all_todos)
+        case Commands.group.rawValue:
+            list_menu()
+        // case Commands.order.rawValue:
+        //     order_menu()
+        //     print_objects(all_todos)
+        case "exit":
+            break whole_app
+        default:
+            print("fukc u")
+    }
+}
