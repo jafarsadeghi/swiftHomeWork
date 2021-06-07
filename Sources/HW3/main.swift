@@ -165,7 +165,7 @@ func list_menu(){
     }
 }
 
- func order_menu(){
+func order_menu(){
     order_while: while true{
         print(ORDER_MENU)
         let command = readLine()!.components(separatedBy: " ")
@@ -201,7 +201,13 @@ func list_menu(){
             }
         }
     }
-
+func delete(title: String){
+    for (index, todo) in all_todos.enumerated() {
+        if todo.title == title{
+            all_todos.remove(at: index)
+        }
+    }
+}
 
 app: while true {
     print(MAIN_MENU)
@@ -215,8 +221,7 @@ app: while true {
         case Commands.edit.rawValue:
             edit_menu(obj:&all_todos[Int(command[1])!])
         case Commands.delete.rawValue:
-            all_todos.remove(at:Int(command[1])!)
-            //should we remove obj too?
+            delete(title: command[1])
         case Commands.group.rawValue:
             list_menu()
         // case Commands.order.rawValue:
