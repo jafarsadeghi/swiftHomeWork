@@ -22,7 +22,7 @@ let LIST_MENU =
             "-----------------------------------"; 
 
 let ORDER_MENU =
-            "-----------------------------------\n" +
+            "------------------------------------\n" +
             "Oredr Menu:\n" +
             "priority asc\n" +
             "priority des\n" +
@@ -86,9 +86,7 @@ func is_unique(array: [ToDo], new_item: ToDo) -> Bool {
 //     }
 // }
 
-
 func print_objects(todos: [ToDo]) {
-    print("Objects:")
     for (index, todo) in todos.enumerated() {
         print("\(index): \(todo.description)")
     }
@@ -110,8 +108,6 @@ func edit_menu(obj: inout ToDo){
         switch command[0] {
             case "title":
                 obj.title = command[1]
-                print(obj)
-                
             case "content":
                 obj.content = command[1]
             case "priority":
@@ -119,7 +115,7 @@ func edit_menu(obj: inout ToDo){
             case "exit":
                 break edit_while
             default:
-                print("fuck u")
+                print("your command is not correct, try again!")
         }
     }
 }
@@ -127,15 +123,11 @@ func edit_menu(obj: inout ToDo){
 func list_menu(){
     list_while: while true {
         print(LIST_MENU)
-        let input_string = readLine(); 
-        if input_string == nil {
-          print("Please enter something!");
-          continue;
-        }
-        let command = input_string!.components(separatedBy: " ")
-        switch command[0] {
+        let command = readLine()!.components(separatedBy: " ")
+        switch_labe: switch command[0] {
             case "all":
                 for list in lists {
+                  print("\(list.name):")
                   print_objects(todos: list.todos)
                 }
             case "make":
@@ -153,14 +145,15 @@ func list_menu(){
                 let todo = all_todos[todo_id] 
                 for list in lists{
                     if list.todos.contains(todo){
-                        print("\(todo.title) is in \(list.name) list")
-                        break
+                        print("\(todo.title) is in \(list.name)")
+                        break switch_labe
                     }
                 }
+                print("\(todo.title) is not in any list")
             case "exit":
                 break list_while
             default:
-                print("fuk u")
+                print("your command is not correct, try again!")
         }
     }
 }
@@ -224,14 +217,11 @@ app: while true {
             delete(title: command[1])
         case Commands.group.rawValue:
             list_menu()
-        // case Commands.order.rawValue:
-        //     order_menu()
-        //     print_objects(all_todos)
         case Commands.order.rawValue:
             order_menu()
         case "exit":
             break app
         default:
-            print("fukc u")
+            print("your command is not correct, try again!")
     }
 }
