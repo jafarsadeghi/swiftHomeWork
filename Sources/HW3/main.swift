@@ -9,7 +9,7 @@ let MAIN_MENU =
             "\(Commands.all) --> see all Todos\n\(Commands.delete) <id>\n" +
             "\(Commands.edit) <id> --> Edit menu\n" +
             "\(Commands.group) --> Group menu\n" +
-            "\(Commands.order) --> change ordering\n" +
+            "\(Commands.order) --> Change ordering menu\n" +
             "-----------------------------------";
 
 let LIST_MENU = 
@@ -100,7 +100,7 @@ func edit_menu(obj: inout ToDo){
               "\(obj.description)\n" +
               "title <title> --> edit title\n" +
               "content <content> --> edit content\n" +
-              "priority <priority> --> edit priority" +
+              "priority <priority> --> edit priority\n" +
               "-----------------------------------";
 
         print(EDIT_MENU)
